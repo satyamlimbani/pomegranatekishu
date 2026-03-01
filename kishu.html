@@ -5,77 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>દાડમ બિલ કેલ્ક્યુલેટર</title>
     <style>
-        :root { --primary-red: #8b0000; --bg-yellow: #fff9c4; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f0f0f0; padding: 10px; margin: 0; }
+        :root { --primary-red: #8b0000; --bg-yellow: #fff9c4; --success-green: #2e7d32; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f4f4f4; padding: 10px; margin: 0; }
         
-        /* કાર્ડ અને વોટરમાર્કની ડીઝાઇન */
-        .card { position: relative; background: white; border: 2px solid var(--primary-red); border-radius: 15px; max-width: 480px; margin: auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); overflow: hidden; padding-bottom: 10px; z-index: 1; }
+        .card { position: relative; background: white; border: 2px solid var(--primary-red); border-radius: 15px; max-width: 500px; margin: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden; padding-bottom: 10px; }
         
-        .watermark-main { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 100px; color: rgba(0, 0, 0, 0.04); z-index: 0; pointer-events: none; font-weight: bold; user-select: none; white-space: nowrap; }
+        .watermark-main { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 80px; color: rgba(0, 0, 0, 0.03); z-index: 0; pointer-events: none; font-weight: bold; user-select: none; white-space: nowrap; }
 
-        /* બધા એલિમેન્ટ્સ વોટરમાર્કની ઉપર દેખાય તે માટે */
         .header, .row, table, .btn-container, .footer-box, .btn-download, .credit-text { position: relative; z-index: 2; }
 
         .header { background: var(--bg-yellow); padding: 15px; text-align: center; border-bottom: 2px solid var(--primary-red); }
         .row { display: flex; align-items: center; padding: 8px 15px; border-bottom: 1px solid #eee; }
-        .row label { width: 100px; font-weight: bold; font-size: 14px; }
-        .row input { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; background: rgba(255, 255, 255, 0.8); }
+        .row label { width: 80px; font-weight: bold; font-size: 14px; color: #444; }
+        .row input { flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
         
         table { width: 100%; border-collapse: collapse; margin-top: 5px; }
-        th { background: #f8f8f8; font-size: 11px; padding: 10px 2px; border-bottom: 2px solid #ddd; text-align: center; color: #555; }
-        td { padding: 5px; text-align: center; border-bottom: 1px solid #fafafa; }
-        td input { width: 85%; padding: 8px 2px; border: 1px solid #ddd; border-radius: 4px; text-align: center; font-size: 14px; background: rgba(255, 255, 255, 0.8); }
+        th { background: #f8f8f8; font-size: 11px; padding: 10px 2px; border-bottom: 2px solid #ddd; color: #555; }
+        td { padding: 5px; text-align: center; }
+        td input { width: 90%; padding: 8px 2px; border: 1px solid #ddd; border-radius: 4px; text-align: center; font-size: 14px; }
 
-        .btn-container { display: flex; justify-content: center; gap: 350px; padding: 3px; margin: 5px 0; }
-        .btn-circle { width: 35px; height: 35px; border-radius: 50%; border: none; color: white; font-size: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-        .btn-add { background-color: #1b5e20; box-shadow: 0 4px #144618; }
-        .btn-add:active { box-shadow: 0 0px; transform: translateY(4px); }
-        .btn-remove { background-color: #d32f2f; box-shadow: 0 4px #a82525; }
-        .btn-remove:active { box-shadow: 0 0px; transform: translateY(4px); }
-
-        .footer-box { padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 15px; margin: 0 10px; border-radius: 8px; margin-bottom: 5px; }
-        .blue { background: rgba(227, 242, 253, 0.9); color: #1565c0; border: 1px solid #bbdefb; }
-        .red { background: rgba(255, 235, 238, 0.9); color: #c62828; border: 1px solid #ffcdd2; }
-        .avg-row { background: rgba(255, 253, 231, 0.9); color: #f57f17; border: 1px solid #a82525; }
-        .green { background: rgba(232, 245, 233, 0.9); color: #2e7d32; border: 2px solid #2e7d32; font-size: 18px; }
-        
-        .charge-input { width: 45px; border: 1px solid #ccc; border-radius: 4px; text-align: center; font-weight: bold; color: #c62828; }
-
-        .btn-download { background-color: #0277bd; color: white; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 8px; width: calc(100% - 30px); margin: 10px 15px 15px 15px; cursor: pointer; box-shadow: 0 4px #01579b; transition: 0.2s; }
-        .btn-download:active { box-shadow: 0 0px; transform: translateY(4px); }
-
-        /* ડેવલપર ક્રેડિટ માટેની સ્ટાઇલ */
-        .credit-text { text-align: center; font-size: 13px; color: #666; font-weight: bold; padding-bottom: 5px; }
-
-        @media print {
-            .btn-container, .btn-download { display: none; }
-            body { background-color: white; }
-            .card { border: none; box-shadow: none; padding-bottom: 0; }
-            .footer-box { border-radius: 0; margin: 0; margin-bottom: 2px; border-left: none; border-right: none; }
+        /* બટન માટેનો ખાસ સુધારો */
+        .btn-container { 
+            display: flex; 
+            justify-content: center; 
+            gap: 50px; /* બે બટન વચ્ચેની જગ્યા */
+            padding: 15px; 
         }
+        .btn-circle { 
+            width: 45px; 
+            height: 45px; 
+            border-radius: 50%; 
+            border: none; 
+            color: white; 
+            font-size: 30px; /* આઇકોનની સાઈઝ */
+            font-weight: bold;
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            transition: 0.2s; 
+            box-shadow: 0 4px rgba(0,0,0,0.2); 
+        }
+        .btn-add { background-color: #1b5e20; }
+        .btn-remove { background-color: #d32f2f; }
+        .btn-circle:active { transform: translateY(3px); box-shadow: none; }
+
+        .footer-box { padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 15px; margin: 5px 10px; border-radius: 8px; }
+        .blue { background: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }
+        .red { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+        .avg-row { background: #fffde7; color: #f57f17; border: 1px solid #ffe082; }
+        .green { background: #e8f5e9; color: var(--success-green); border: 2px solid var(--success-green); font-size: 18px; }
+        
+        .charge-input { width: 45px; border: 1px solid #ccc; border-radius: 4px; text-align: center; font-weight: bold; }
+        .btn-download { background-color: #0277bd; color: white; border: none; padding: 15px; font-size: 16px; font-weight: bold; border-radius: 8px; width: calc(100% - 30px); margin: 15px; cursor: pointer; transition: 0.3s; }
+        .credit-text { text-align: center; font-size: 12px; color: #888; padding-bottom: 10px; }
     </style>
 </head>
 <body>
 
 <div class="card">
     <div class="watermark-main">Kishu</div>
-
     <div class="header">
         <h3 style="margin:0; color:var(--primary-red);">દાડમ વેચાણ બિલ</h3>
     </div>
-
-    <div class="row">
-        <label>તારીખ:</label>
-        <input type="date" id="billDate">
-    </div>
-    <div class="row">
-        <label>મંડી:</label>
-        <input type="text" id="mandiName" placeholder="મંડીનું નામ">
-    </div>
-    <div class="row">
-        <label>ખેડૂત:</label>
-        <input type="text" id="farmerName" placeholder="ખેડૂતનું નામ">
-    </div>
+    <div class="row"><label>તારીખ:</label><input type="date" id="billDate"></div>
+    <div class="row"><label>મંડી:</label><input type="text" id="mandiName" placeholder="મંડીનું નામ"></div>
+    <div class="row"><label>ખેડૂત:</label><input type="text" id="farmerName" placeholder="ખેડૂતનું નામ"></div>
 
     <table>
         <thead>
@@ -91,52 +86,40 @@
     </table>
 
     <div class="btn-container">
+        <button class="btn-circle btn-remove" onclick="removeRow()">−</button>
         <button class="btn-circle btn-add" onclick="addRow()">+</button>
-        <button class="btn-circle btn-remove" onclick="removeRow()">-</button>
     </div>
 
     <div class="footer-box blue">
         <span>કુલ કેરેટ: <span id="total-crates">0</span></span>
-        <span>કુલ વજન: <span id="total-w">0</span> kg</span>
+        <span>કુલ વજન: <span id="total-w">0.00</span> kg</span>
     </div>
-
     <div class="footer-box red">
         <span>કમિશન (<input type="number" id="commRate" value="3" class="charge-input" oninput="calculate()">%)</span>
-        <span id="comm-val">0.00</span>
+        <span>₹ <span id="comm-val">0.00</span></span>
     </div>
-
     <div class="footer-box red">
-        <span>ભાડું (₹<input type="number" id="perCrateRate" value="15" class="charge-input" oninput="calculate()">)</span>
-        <span id="total-crate-charge">0.00</span>
+        <span>ભાડું (₹ <input type="number" id="perCrateRate" value="15" class="charge-input" oninput="calculate()">)</span>
+        <span>₹ <span id="total-crate-charge">0.00</span></span>
     </div>
-
     <div class="footer-box avg-row">
-        <span>નેટ એવરેજ (Net Avg):</span>
+        <span>નેટ એવરેજ:</span>
         <span>₹ <span id="net-avg">0.00</span> /kg</span>
     </div>
-
     <div class="footer-box green">
-        <span>ચોખ્ખી રકમ (Net Amt):</span>
-        <span id="net-amt">0.00</span>
+        <span>ચોખ્ખી રકમ:</span>
+        <span>₹ <span id="net-amt">0.00</span></span>
     </div>
 
-    <button class="btn-download" onclick="generateReceipt()">🖨️ બિલ પ્રિન્ટ / ડાઉનલોડ કરો</button>
-
+    <button class="btn-download" onclick="window.print()">🖨️ બિલ પ્રિન્ટ / ડાઉનલોડ કરો</button>
     <div class="credit-text">Design & Developed by: Kishu</div>
-
 </div>
 
 <script>
     const tableBody = document.getElementById('table-body');
-
     window.onload = function() {
-        for(let i=0; i<6; i++) { addRow(); }
-        
-        let today = new Date();
-        let dd = String(today.getDate()).padStart(2, '0');
-        let mm = String(today.getMonth() + 1).padStart(2, '0'); 
-        let yyyy = today.getFullYear();
-        document.getElementById('billDate').value = yyyy + '-' + mm + '-' + dd;
+        for(let i=0; i<5; i++) { addRow(); }
+        document.getElementById('billDate').valueAsDate = new Date();
     };
 
     function addRow() {
@@ -165,166 +148,37 @@
 
     function syncRates(inputElement, type) {
         let row = inputElement.closest("tr");
-        let rate20Input = row.querySelector(".rate20");
-        let rate1Input = row.querySelector(".rate1");
-
+        let rate20 = row.querySelector(".rate20");
+        let rate1 = row.querySelector(".rate1");
         if (type === 'rate20') {
-            let val = parseFloat(rate20Input.value);
-            if (!isNaN(val)) {
-                rate1Input.value = (val / 20).toFixed(2);
-            } else {
-                rate1Input.value = "";
-            }
-        } else if (type === 'rate1') {
-            let val = parseFloat(rate1Input.value);
-            if (!isNaN(val)) {
-                rate20Input.value = (val * 20).toFixed(2);
-            } else {
-                rate20Input.value = "";
-            }
+            rate1.value = rate20.value ? (parseFloat(rate20.value) / 20).toFixed(2) : "";
+        } else {
+            rate20.value = rate1.value ? (parseFloat(rate1.value) * 20).toFixed(2) : "";
         }
-        
         calculate();
     }
 
     function calculate() {
         let rows = document.querySelectorAll("#table-body tr");
-        let totalCrates = 0;
-        let totalWeight = 0;
-        let grandTotal = 0;
-
+        let totalCrates = 0, totalWeight = 0, grandTotal = 0;
         rows.forEach(row => {
             let crate = parseFloat(row.querySelector(".crate").value) || 0;
             let weight = parseFloat(row.querySelector(".weight").value) || 0;
             let rate1 = parseFloat(row.querySelector(".rate1").value) || 0;
-            
-            let lineTotal = weight * rate1;
             totalCrates += crate;
             totalWeight += weight;
-            grandTotal += lineTotal;
+            grandTotal += (weight * rate1);
         });
-
+        let commPercent = parseFloat(document.getElementById("commRate").value) || 0;
+        let commission = grandTotal * (commPercent / 100);
+        let rentCharge = totalCrates * (parseFloat(document.getElementById("perCrateRate").value) || 0);
+        let netAmt = grandTotal - commission - rentCharge;
         document.getElementById("total-crates").innerText = totalCrates;
         document.getElementById("total-w").innerText = totalWeight.toFixed(2);
-        
-        let commPercentage = parseFloat(document.getElementById("commRate").value) || 0;
-        let commission = grandTotal * (commPercentage / 100);
         document.getElementById("comm-val").innerText = commission.toFixed(2);
-
-        let perCratePrice = parseFloat(document.getElementById("perCrateRate").value) || 0;
-        let totalCrateCharge = totalCrates * perCratePrice;
-        document.getElementById("total-crate-charge").innerText = totalCrateCharge.toFixed(2);
-
-        let netAmount = grandTotal - commission - totalCrateCharge;
-        document.getElementById("net-amt").innerText = netAmount.toFixed(2);
-
-        let netAvg = totalWeight > 0 ? (netAmount / totalWeight) : 0;
-        document.getElementById("net-avg").innerText = netAvg.toFixed(2);
-    }
-
-    function generateReceipt() {
-        let dateVal = document.getElementById('billDate').value;
-        let formattedDate = dateVal ? dateVal.split('-').reverse().join('-') : '-';
-        
-        let mandi = document.getElementById('mandiName').value || "-";
-        let farmer = document.getElementById('farmerName').value || "-";
-        
-        let totalCrates = document.getElementById("total-crates").innerText;
-        let totalW = document.getElementById("total-w").innerText;
-        let commRate = document.getElementById("commRate").value;
-        let commVal = document.getElementById("comm-val").innerText;
-        let rentRate = document.getElementById("perCrateRate").value;
-        let rentVal = document.getElementById("total-crate-charge").innerText;
-        let netAvg = document.getElementById("net-avg").innerText;
-        let netAmt = document.getElementById("net-amt").innerText;
-
-        let printWindow = window.open('', '_blank');
-        
-        let html = `
-        <html>
-        <head>
-            <title>બિલ - ${farmer}</title>
-            <style>
-                body { font-family: 'Segoe UI', Tahoma, sans-serif; padding: 20px; color: #333; }
-                .receipt-box { position: relative; border: 2px solid #000; padding: 20px; max-width: 450px; margin: auto; border-radius: 10px; overflow: hidden; }
-                
-                .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 80px; color: rgba(0, 0, 0, 0.08); z-index: 0; pointer-events: none; user-select: none; white-space: nowrap; font-weight: bold; }
-                .content { position: relative; z-index: 2; }
-
-                h2 { text-align: center; margin-top: 0; border-bottom: 2px solid #000; padding-bottom: 10px; color: #8b0000; }
-                .info-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 15px; font-weight: bold; }
-                table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.7); }
-                th, td { border: 1px solid #000; padding: 8px; text-align: center; font-size: 14px; }
-                th { background-color: #f0f0f0; }
-                .summary { font-weight: bold; font-size: 15px; line-height: 1.8; background: rgba(255, 255, 255, 0.7); }
-                .flex-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #ccc; padding: 4px 0; }
-                .flex-row.total { border-bottom: none; border-top: 2px solid #000; font-size: 18px; margin-top: 5px; padding-top: 10px; color: #2e7d32; }
-                
-                /* પ્રિન્ટમાં ડેવલપર ક્રેડિટની ડીઝાઇન */
-                .print-credit { text-align: center; font-size: 12px; color: #666; margin-top: 20px; font-style: italic; }
-
-                @media print {
-                    .watermark { -webkit-print-color-adjust: exact; color-adjust: exact; }
-                }
-            </style>
-        </head>
-        <body>
-            <div class="receipt-box">
-                <div class="watermark">Kishu</div>
-                
-                <div class="content">
-                    <h2>દાડમ વેચાણ બિલ</h2>
-                    <div class="info-row"><span>તારીખ:</span> <span>${formattedDate}</span></div>
-                    <div class="info-row"><span>મંડી:</span> <span>${mandi}</span></div>
-                    <div class="info-row"><span>ખેડૂત:</span> <span>${farmer}</span></div>
-                    
-                    <table>
-                        <tr>
-                            <th>કેરેટ</th>
-                            <th>વજન (kg)</th>
-                            <th>20kg ભાવ</th>
-                            <th>1kg ભાવ</th>
-                        </tr>`;
-                        
-        let rows = document.querySelectorAll("#table-body tr");
-        rows.forEach(row => {
-            let crate = row.querySelector(".crate").value;
-            let weight = row.querySelector(".weight").value;
-            let rate20 = row.querySelector(".rate20").value;
-            let rate1 = row.querySelector(".rate1").value;
-            
-            if(crate > 0 || weight > 0) {
-                html += `<tr><td>${crate}</td><td>${weight}</td><td>₹${rate20}</td><td>₹${rate1}</td></tr>`;
-            }
-        });
-
-        html += `
-                    </table>
-                    
-                    <div class="summary">
-                        <div class="flex-row"><span>કુલ કેરેટ:</span> <span>${totalCrates}</span></div>
-                        <div class="flex-row"><span>કુલ વજન:</span> <span>${totalW} kg</span></div>
-                        <div class="flex-row"><span>કમિશન (${commRate}%):</span> <span>₹ ${commVal}</span></div>
-                        <div class="flex-row"><span>ભાડું (₹${rentRate}):</span> <span>₹ ${rentVal}</span></div>
-                        <div class="flex-row" style="color:#f57f17;"><span>નેટ એવરેજ:</span> <span>₹ ${netAvg} /kg</span></div>
-                        
-                        <div class="flex-row total"><span>ચોખ્ખી રકમ:</span> <span>₹ ${netAmt}</span></div>
-                    </div>
-
-                    <div class="print-credit">Design & Developed by: Kishu</div>
-
-                </div>
-            </div>
-            <script>
-                window.onload = function() { 
-                    setTimeout(function() { window.print(); }, 500);
-                }
-            <\/script>
-        </body>
-        </html>`;
-
-        printWindow.document.write(html);
-        printWindow.document.close();
+        document.getElementById("total-crate-charge").innerText = rentCharge.toFixed(2);
+        document.getElementById("net-amt").innerText = netAmt.toFixed(2);
+        document.getElementById("net-avg").innerText = totalWeight > 0 ? (netAmt / totalWeight).toFixed(2) : "0.00";
     }
 </script>
 
